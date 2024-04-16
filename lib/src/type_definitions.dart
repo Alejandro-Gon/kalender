@@ -137,7 +137,7 @@ typedef MultiDayEventLayoutDelegateBuilder<T extends Object?>
 });
 
 typedef EventTileBuilder<T extends Object?> = Widget Function(
-  CalendarEvent event,
+  CalendarEvent<T> event,
   TileConfiguration configuration,
   double heightPerMinute,
   bool isChanging,
@@ -148,7 +148,7 @@ typedef EventTileBuilder<T extends Object?> = Widget Function(
 );
 
 typedef MultiDayEventTileBuilder<T extends Object?> = Widget Function(
-  CalendarEvent event,
+  CalendarEvent<T> event,
   MultiDayTileConfiguration configuration,
   DateTimeRange rescheduleDateRange,
   double horizontalStep,

@@ -226,8 +226,8 @@ class CalendarView<T> extends StatelessWidget {
   /// The [ScheduleTileBuilder] used to build schedule event tiles.
   final ScheduleTileBuilder<T>? scheduleTileBuilder;
 
-  final EventTileBuilder? eventTileBuilder;
-  final MultiDayEventTileBuilder? multiDayEventTileBuilder;
+  final EventTileBuilder<T>? eventTileBuilder;
+  final MultiDayEventTileBuilder<T>? multiDayEventTileBuilder;
 
   @override
   Widget build(BuildContext context) {
