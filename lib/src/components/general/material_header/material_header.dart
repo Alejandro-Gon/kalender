@@ -20,8 +20,17 @@ class CalendarHeaderBackground extends StatelessWidget {
     return Material(
       color: color,
       surfaceTintColor: surfaceTintColor,
-      elevation: elevation,
-      child: child,
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border(
+            bottom: BorderSide(
+              width: elevation,
+              color: surfaceTintColor,
+            ),
+          ),
+        ),
+        child: child,
+      ),
     );
   }
 }
