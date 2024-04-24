@@ -232,7 +232,7 @@ class CalendarView<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (viewConfiguration is MultiDayViewConfiguration) {
-      return MultiDayView(
+      return MultiDayView<T>(
         controller: controller,
         eventsController: eventsController,
         tileBuilder: tileBuilder!,
@@ -263,7 +263,7 @@ class CalendarView<T> extends StatelessWidget {
     }
 
     if (viewConfiguration is ScheduleViewConfiguration) {
-      return ScheduleView(
+      return ScheduleView<T>(
         controller: controller,
         eventsController: eventsController,
         components: components,
@@ -276,6 +276,6 @@ class CalendarView<T> extends StatelessWidget {
       );
     }
 
-    return Container();
+    return const SizedBox();
   }
 }
