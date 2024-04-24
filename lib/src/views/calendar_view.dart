@@ -126,6 +126,7 @@ class CalendarView<T> extends StatelessWidget {
     this.layoutDelegates,
     this.eventTileBuilder,
     this.multiDayEventTileBuilder,
+    this.useGesturesOnEventTileBuilder,
   }) : assert(
           tileBuilder != null && multiDayTileBuilder != null,
           'All Event Tile builders must be assigned',
@@ -144,6 +145,7 @@ class CalendarView<T> extends StatelessWidget {
     this.layoutDelegates,
     this.eventTileBuilder,
     this.multiDayEventTileBuilder,
+    this.useGesturesOnEventTileBuilder,
   })  : scheduleTileBuilder = null,
         assert(
           tileBuilder != null && multiDayTileBuilder != null,
@@ -166,6 +168,7 @@ class CalendarView<T> extends StatelessWidget {
     this.layoutDelegates,
     this.eventTileBuilder,
     this.multiDayEventTileBuilder,
+    this.useGesturesOnEventTileBuilder,
   })  : tileBuilder = null,
         scheduleTileBuilder = null,
         assert(
@@ -189,6 +192,7 @@ class CalendarView<T> extends StatelessWidget {
     this.layoutDelegates,
     this.eventTileBuilder,
     this.multiDayEventTileBuilder,
+    this.useGesturesOnEventTileBuilder,
   })  : tileBuilder = null,
         multiDayTileBuilder = null,
         assert(
@@ -229,6 +233,9 @@ class CalendarView<T> extends StatelessWidget {
   final EventTileBuilder<T>? eventTileBuilder;
   final MultiDayEventTileBuilder<T>? multiDayEventTileBuilder;
 
+  /// Allows resize and rescheduling on eventTileBuilder
+  final bool? useGesturesOnEventTileBuilder;
+
   @override
   Widget build(BuildContext context) {
     if (viewConfiguration is MultiDayViewConfiguration) {
@@ -245,6 +252,7 @@ class CalendarView<T> extends StatelessWidget {
         layoutDelegates: layoutDelegates,
         eventTileBuilder: eventTileBuilder,
         multiDayEventTileBuilder: multiDayEventTileBuilder,
+        useGesturesOnEventTileBuilder: useGesturesOnEventTileBuilder,
       );
     }
 
@@ -259,6 +267,7 @@ class CalendarView<T> extends StatelessWidget {
         style: style,
         layoutDelegates: layoutDelegates,
         multiDayEventTileBuilder: multiDayEventTileBuilder,
+        useGesturesOnEventTileBuilder: useGesturesOnEventTileBuilder,
       );
     }
 
@@ -273,6 +282,7 @@ class CalendarView<T> extends StatelessWidget {
         style: style,
         layoutDelegates: layoutDelegates,
         scheduleTileBuilder: scheduleTileBuilder!,
+        useGesturesOnEventTileBuilder: useGesturesOnEventTileBuilder,
       );
     }
 

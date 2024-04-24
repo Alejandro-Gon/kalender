@@ -31,6 +31,7 @@ class MultiDayView<T> extends StatefulWidget {
     this.layoutDelegates,
     this.eventTileBuilder,
     this.multiDayEventTileBuilder,
+    this.useGesturesOnEventTileBuilder,
   });
 
   /// The [CalendarController] used to control the view.
@@ -62,6 +63,9 @@ class MultiDayView<T> extends StatefulWidget {
 
   final EventTileBuilder<T>? eventTileBuilder;
   final MultiDayEventTileBuilder<T>? multiDayEventTileBuilder;
+
+  /// Allows resize and rescheduling on eventTileBuilder
+  final bool? useGesturesOnEventTileBuilder;
 
   @override
   State<MultiDayView<T>> createState() => _MultiDayViewState<T>();
@@ -155,6 +159,8 @@ class _MultiDayViewState<T> extends State<MultiDayView<T>> {
               multiDayTileBuilder: widget.multiDayTileBuilder,
               eventTileBuilder: widget.eventTileBuilder,
               multiDayEventTileBuilder: widget.multiDayEventTileBuilder,
+              useGesturesOnEventTileBuilder:
+                  widget.useGesturesOnEventTileBuilder ?? false,
             ),
             platformData: PlatformData(),
             layoutDelegates: layoutDelegates,

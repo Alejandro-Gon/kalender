@@ -29,6 +29,7 @@ class MonthView<T> extends StatefulWidget {
     this.functions,
     this.layoutDelegates,
     this.multiDayEventTileBuilder,
+    this.useGesturesOnEventTileBuilder,
   });
 
   /// The [CalendarController] used to control the view.
@@ -56,6 +57,9 @@ class MonthView<T> extends StatefulWidget {
   final MultiDayTileBuilder<T> multiDayTileBuilder;
 
   final MultiDayEventTileBuilder<T>? multiDayEventTileBuilder;
+
+  /// Allows resize and rescheduling on eventTileBuilder
+  final bool? useGesturesOnEventTileBuilder;
 
   @override
   State<MonthView<T>> createState() => _MonthViewState<T>();
@@ -90,6 +94,8 @@ class _MonthViewState<T> extends State<MonthView<T>>
             tileComponents: CalendarTileComponents(
               multiDayTileBuilder: widget.multiDayTileBuilder,
               multiDayEventTileBuilder: widget.multiDayEventTileBuilder,
+              useGesturesOnEventTileBuilder:
+                  widget.useGesturesOnEventTileBuilder ?? false,
             ),
             platformData: PlatformData(),
             layoutDelegates:

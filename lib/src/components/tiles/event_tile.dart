@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kalender/kalender.dart';
 import 'package:kalender/src/extensions.dart';
 import 'package:kalender/src/providers/calendar_style.dart';
+import 'package:kalender/src/type_definitions.dart';
 
 class EventGestureDetector<T> extends StatefulWidget {
   const EventGestureDetector({
@@ -14,6 +15,7 @@ class EventGestureDetector<T> extends StatefulWidget {
     required this.verticalStep,
     required this.horizontalStep,
     required this.snapPoints,
+    this.tileBuilder,
   });
 
   final CalendarEvent<T> event;
@@ -26,6 +28,7 @@ class EventGestureDetector<T> extends StatefulWidget {
   final double verticalStep;
   final double horizontalStep;
   final List<DateTime> snapPoints;
+  final TileBuilder<T>? tileBuilder;
 
   @override
   State<EventGestureDetector<T>> createState() =>
@@ -174,10 +177,14 @@ class _EventGestureDetectorState<T> extends State<EventGestureDetector<T>> {
             child: Stack(
               fit: StackFit.expand,
               children: [
-                scope.tileComponents.tileBuilder!(
-                  widget.event,
-                  widget.tileConfiguration,
-                ),
+                widget.tileBuilder?.call(
+                      widget.event,
+                      widget.tileConfiguration,
+                    ) ??
+                    scope.tileComponents.tileBuilder!(
+                      widget.event,
+                      widget.tileConfiguration,
+                    ),
                 if (resizeTopWidget != null) resizeTopWidget,
                 if (resizeBottomWidget != null) resizeBottomWidget,
               ],

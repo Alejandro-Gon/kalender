@@ -21,6 +21,7 @@ class CalendarTileComponents<T> {
     this.multiDayTileBuilder,
     this.eventTileBuilder,
     this.multiDayEventTileBuilder,
+    this.useGesturesOnEventTileBuilder = false,
   });
 
   /// The [TileBuilder] is used to build event tiles that are displayed on [SingleDayView] and [MultiDayView] days.
@@ -33,6 +34,8 @@ class CalendarTileComponents<T> {
   final ScheduleTileBuilder<T>? scheduleTileBuilder;
 
   final EventTileBuilder<T>? eventTileBuilder;
+
+  final bool useGesturesOnEventTileBuilder;
 
   final MultiDayEventTileBuilder<T>? multiDayEventTileBuilder;
 }

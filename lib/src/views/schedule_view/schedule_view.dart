@@ -20,6 +20,7 @@ class ScheduleView<T> extends StatefulWidget {
     this.style,
     this.functions,
     this.layoutDelegates,
+    this.useGesturesOnEventTileBuilder,
   });
 
   /// The [CalendarController] used to control the view.
@@ -44,6 +45,9 @@ class ScheduleView<T> extends StatefulWidget {
   final CalendarLayoutDelegates<T>? layoutDelegates;
 
   final ScheduleTileBuilder<T> scheduleTileBuilder;
+
+  /// Allows resize and rescheduling on eventTileBuilder
+  final bool? useGesturesOnEventTileBuilder;
 
   @override
   State<ScheduleView<T>> createState() => _ScheduleViewState<T>();
@@ -76,6 +80,8 @@ class _ScheduleViewState<T> extends State<ScheduleView<T>> {
             functions: widget.functions ?? CalendarEventHandlers<T>(),
             tileComponents: CalendarTileComponents<T>(
               scheduleTileBuilder: widget.scheduleTileBuilder,
+              useGesturesOnEventTileBuilder:
+                  widget.useGesturesOnEventTileBuilder ?? false,
             ),
             platformData: PlatformData(),
             layoutDelegates:

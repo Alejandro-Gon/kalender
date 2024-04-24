@@ -48,27 +48,56 @@ class EventGroupWidget<T> extends StatelessWidget {
         continuesAfter: event.end.isAfter(eventGroup.end),
       );
 
-      final eventTile = scope.tileComponents.eventTileBuilder?.call(
-            event,
-            tileConfiguration,
-            heightPerMinute,
-            isChanging,
-            visibleDateTimeRange,
-            verticalStep,
-            horizontalStep,
-            snapPoints,
-            eventGroup.events.length,
-          ) ??
-          EventGestureDetector(
-            event: event,
-            tileConfiguration: tileConfiguration,
-            heightPerMinute: heightPerMinute,
-            isChanging: isChanging,
-            visibleDateTimeRange: visibleDateTimeRange,
-            verticalStep: verticalStep,
-            horizontalStep: horizontalStep,
-            snapPoints: snapPoints,
-          );
+      Widget eventTile = const SizedBox();
+
+      if (scope.tileComponents.useGesturesOnEventTileBuilder) {
+        eventTile = EventGestureDetector(
+          event: event,
+          tileConfiguration: tileConfiguration,
+          heightPerMinute: heightPerMinute,
+          isChanging: isChanging,
+          visibleDateTimeRange: visibleDateTimeRange,
+          verticalStep: verticalStep,
+          horizontalStep: horizontalStep,
+          snapPoints: snapPoints,
+          tileBuilder: (event, tileConfiguration) {
+            return scope.tileComponents.eventTileBuilder?.call(
+                  event,
+                  tileConfiguration,
+                  heightPerMinute,
+                  isChanging,
+                  visibleDateTimeRange,
+                  verticalStep,
+                  horizontalStep,
+                  snapPoints,
+                  eventGroup.events.length,
+                ) ??
+                const SizedBox();
+          },
+        );
+      } else {
+        eventTile = scope.tileComponents.eventTileBuilder?.call(
+              event,
+              tileConfiguration,
+              heightPerMinute,
+              isChanging,
+              visibleDateTimeRange,
+              verticalStep,
+              horizontalStep,
+              snapPoints,
+              eventGroup.events.length,
+            ) ??
+            EventGestureDetector(
+              event: event,
+              tileConfiguration: tileConfiguration,
+              heightPerMinute: heightPerMinute,
+              isChanging: isChanging,
+              visibleDateTimeRange: visibleDateTimeRange,
+              verticalStep: verticalStep,
+              horizontalStep: horizontalStep,
+              snapPoints: snapPoints,
+            );
+      }
 
       children.add(
         LayoutId(
