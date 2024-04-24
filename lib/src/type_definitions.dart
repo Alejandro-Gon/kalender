@@ -145,6 +145,7 @@ typedef EventTileBuilder<T extends Object?> = Widget Function(
   double verticalStep,
   double horizontalStep,
   List<DateTime> snapPoints,
+  int eventsInRange,
 );
 
 typedef MultiDayEventTileBuilder<T extends Object?> = Widget Function(

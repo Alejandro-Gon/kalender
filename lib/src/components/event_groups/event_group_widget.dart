@@ -57,6 +57,7 @@ class EventGroupWidget<T> extends StatelessWidget {
             verticalStep,
             horizontalStep,
             snapPoints,
+            eventGroup.events.length,
           ) ??
           EventGestureDetector(
             event: event,
