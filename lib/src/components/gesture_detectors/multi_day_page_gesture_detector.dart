@@ -29,7 +29,6 @@ class _MultiDayPageGestureDetectorState<T>
     extends State<MultiDayPageGestureDetector<T>> {
   CalendarScope<T> get scope => CalendarScope.of<T>(context);
   CalendarEventsController<T> get controller => scope.eventsController;
-  bool get isMobileDevice => scope.platformData.isMobileDevice;
   bool get createEvents => widget.viewConfiguration.createEvents;
 
   int get newEventDurationInMinutes =>
@@ -54,13 +53,21 @@ class _MultiDayPageGestureDetectorState<T>
                   (slotIndex) => Expanded(
                     child: SizedBox.expand(
                       child: GestureDetector(
-                        onLongPress: () => widget.viewConfiguration.createEventTrigger == CreateEventTrigger.longPress
-                            ? _createEvent(calculateNewEventDateTimeRange(date, slotIndex))
+                        onLongPress: () => widget
+                                    .viewConfiguration.createEventTrigger ==
+                                CreateEventTrigger.longPress
+                            ? _createEvent(
+                                calculateNewEventDateTimeRange(date, slotIndex),
+                              )
                             : controller.deselectEvent(),
-                        onTap: () => widget.viewConfiguration.createEventTrigger == CreateEventTrigger.tap
-                            ? _createEvent(calculateNewEventDateTimeRange(date, slotIndex))
+                        onTap: () => widget
+                                    .viewConfiguration.createEventTrigger ==
+                                CreateEventTrigger.tap
+                            ? _createEvent(
+                                calculateNewEventDateTimeRange(date, slotIndex),
+                              )
                             : controller.deselectEvent(),
-                        onVerticalDragStart: isMobileDevice || !createEvents
+                        onVerticalDragStart: !createEvents
                             ? null
                             : (details) => _onVerticalDragStart(
                                   details,
@@ -69,10 +76,9 @@ class _MultiDayPageGestureDetectorState<T>
                                     slotIndex,
                                   ),
                                 ),
-                        onVerticalDragEnd: isMobileDevice || !createEvents
-                            ? null
-                            : _onVerticalDragEnd,
-                        onVerticalDragUpdate: isMobileDevice || !createEvents
+                        onVerticalDragEnd:
+                            !createEvents ? null : _onVerticalDragEnd,
+                        onVerticalDragUpdate: !createEvents
                             ? null
                             : (details) => _onVerticalDragUpdate(
                                   details,
