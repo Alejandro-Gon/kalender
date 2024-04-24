@@ -30,9 +30,18 @@ class _MultiDayPageGestureDetectorState<T>
   CalendarScope<T> get scope => CalendarScope.of<T>(context);
   CalendarEventsController<T> get controller => scope.eventsController;
   bool get createEvents => widget.viewConfiguration.createEvents;
+  CreateEventTrigger get createEventTrigger =>
+      widget.viewConfiguration.createEventTrigger;
+  bool get isMobile => scope.platformData.isMobileDevice;
+  bool get longPressDrag =>
+      createEventTrigger == CreateEventTrigger.longPressDrag;
+  bool get longPressAndDrag =>
+      createEventTrigger == CreateEventTrigger.longPressAndDrag;
+  bool get tapAndDrag => createEventTrigger == CreateEventTrigger.tapAndDrag;
 
   int get newEventDurationInMinutes =>
       widget.viewConfiguration.newEventDuration.inMinutes;
+  bool get canDrag => createEvents && !isMobile && !longPressDrag;
 
   double cursorOffset = 0;
   int currentVerticalSteps = 0;
@@ -44,56 +53,103 @@ class _MultiDayPageGestureDetectorState<T>
           createEvents ? SystemMouseCursors.click : SystemMouseCursors.basic,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          for (final date in widget.visibleDates)
-            Expanded(
-              child: Column(
-                children: List.generate(
-                  (hoursADay * 60) ~/ newEventDurationInMinutes,
-                  (slotIndex) => Expanded(
+        children: widget.visibleDates.map((date) {
+          return Expanded(
+            child: Column(
+              children: List.generate(
+                (hoursADay * 60) ~/ newEventDurationInMinutes,
+                (slotIndex) {
+                  return Expanded(
                     child: SizedBox.expand(
                       child: GestureDetector(
-                        onLongPress: () => widget
-                                    .viewConfiguration.createEventTrigger ==
-                                CreateEventTrigger.longPress
-                            ? _createEvent(
-                                calculateNewEventDateTimeRange(date, slotIndex),
-                              )
-                            : controller.deselectEvent(),
-                        onTap: () => widget
-                                    .viewConfiguration.createEventTrigger ==
-                                CreateEventTrigger.tap
-                            ? _createEvent(
-                                calculateNewEventDateTimeRange(date, slotIndex),
-                              )
-                            : controller.deselectEvent(),
-                        onVerticalDragStart: !createEvents
+                        behavior: HitTestBehavior.translucent,
+                        onLongPress: longPressDrag
                             ? null
-                            : (details) => _onVerticalDragStart(
+                            : () {
+                                if (longPressAndDrag) {
+                                  _createEvent(
+                                    calculateNewEventDateTimeRange(
+                                      date,
+                                      slotIndex,
+                                    ),
+                                  );
+                                } else {
+                                  controller.deselectEvent();
+                                }
+                              },
+                        onTap: () {
+                          if (tapAndDrag) {
+                            _createEvent(
+                              calculateNewEventDateTimeRange(date, slotIndex),
+                            );
+                          } else {
+                            controller.deselectEvent();
+                          }
+                        },
+                        onLongPressStart: createEvents && !longPressDrag
+                            ? null
+                            : (_) {
+                                _onVerticalDragStart(
+                                  calculateNewEventDateTimeRange(
+                                    date,
+                                    slotIndex,
+                                  ),
+                                );
+                              },
+                        onLongPressMoveUpdate: createEvents && !longPressDrag
+                            ? null
+                            : (moveDetails) {
+                                final details = DragUpdateDetails(
+                                  delta: Offset(
+                                    moveDetails.offsetFromOrigin.dx,
+                                    moveDetails.offsetFromOrigin.dy -
+                                        cursorOffset,
+                                  ),
+                                  globalPosition: moveDetails.globalPosition,
+                                );
+                                _onVerticalDragUpdate(
                                   details,
                                   calculateNewEventDateTimeRange(
                                     date,
                                     slotIndex,
                                   ),
-                                ),
-                        onVerticalDragEnd:
-                            !createEvents ? null : _onVerticalDragEnd,
-                        onVerticalDragUpdate: !createEvents
+                                );
+                              },
+                        onLongPressEnd: createEvents && !longPressDrag
                             ? null
-                            : (details) => _onVerticalDragUpdate(
+                            : (moveDetails) {
+                                _onVerticalDragEnd(DragEndDetails());
+                              },
+                        onVerticalDragStart: !canDrag
+                            ? null
+                            : (_) {
+                                _onVerticalDragStart(
+                                  calculateNewEventDateTimeRange(
+                                    date,
+                                    slotIndex,
+                                  ),
+                                );
+                              },
+                        onVerticalDragUpdate: !canDrag
+                            ? null
+                            : (details) {
+                                _onVerticalDragUpdate(
                                   details,
                                   calculateNewEventDateTimeRange(
                                     date,
                                     slotIndex,
                                   ),
-                                ),
+                                );
+                              },
+                        onVerticalDragEnd: !canDrag ? null : _onVerticalDragEnd,
                       ),
                     ),
-                  ),
-                ),
+                  );
+                },
               ),
             ),
-        ],
+          );
+        }).toList(),
       ),
     );
   }
@@ -136,7 +192,6 @@ class _MultiDayPageGestureDetectorState<T>
 
   /// Handles the vertical drag start event.
   void _onVerticalDragStart(
-    DragStartDetails details,
     DateTimeRange initialDateTimeRange,
   ) {
     cursorOffset = 0;
@@ -194,7 +249,7 @@ class _MultiDayPageGestureDetectorState<T>
   }
 
   /// Handles the vertical drag end event.
-  void _onVerticalDragEnd(DragEndDetails details) async {
+  void _onVerticalDragEnd(DragEndDetails _) async {
     if (scope.eventsController.selectedEvent == null) return;
 
     cursorOffset = 0;

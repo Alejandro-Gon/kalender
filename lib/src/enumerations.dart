@@ -16,9 +16,13 @@ enum TileType {
 }
 
 enum CreateEventTrigger {
-  /// Creates event on tap gesture.
-  tap,
+  /// Creates event on tap gesture (drag in this option is Desktop only).
+  tapAndDrag,
 
-  /// Creates event on tap hold gesture.
-  longPress,
+  /// Creates event on tap hold gesture (drag in this option is Desktop only).
+  longPressAndDrag,
+
+  /// Creates event on tap hold gesture after finishing Dragging (works on mobile).
+  longPressDrag,
 }
+

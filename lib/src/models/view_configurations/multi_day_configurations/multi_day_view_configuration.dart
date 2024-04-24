@@ -56,7 +56,7 @@ abstract class MultiDayViewConfiguration extends ViewConfiguration {
 
     _initialHeightPerMinute = initialHeightPerMinute ?? 0.7;
 
-    _createEventTrigger = createEventTrigger ?? CreateEventTrigger.tap;
+    _createEventTrigger = createEventTrigger ?? CreateEventTrigger.tapAndDrag;
 
     assert(
       startHour >= 0 && startHour <= 23,
