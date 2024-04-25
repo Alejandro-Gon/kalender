@@ -91,6 +91,14 @@ class _EventGestureDetectorState<T> extends State<EventGestureDetector<T>> {
   }
 
   @override
+  void dispose() {
+    if (canReschedule) {
+      _onRescheduleEnd();
+    }
+    super.dispose();
+  }
+
+  @override
   void didUpdateWidget(covariant EventGestureDetector<T> oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.event != oldWidget.event) {
@@ -525,7 +533,13 @@ class _EventGestureDetectorState<T> extends State<EventGestureDetector<T>> {
 
   /// Handles the onRescheduleEnd event.
   Future<void> _onRescheduleEnd() async {
-    final selectedEvent = eventsController.selectedEvent!;
+    final selectedEvent = eventsController.selectedEvent;
+
+    if (selectedEvent == null ||
+        widget.event != eventsController.selectedEvent) {
+      return;
+    }
+
     eventsController.isRescheduling = false;
     eventsController.deselectEvent();
 
