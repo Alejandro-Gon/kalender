@@ -8,6 +8,7 @@ import 'package:kalender/src/models/calendar/calendar_event.dart';
 import 'package:kalender/src/models/calendar/calendar_event_controller.dart';
 import 'package:kalender/src/models/calendar/calendar_functions.dart';
 import 'package:kalender/src/models/tile_configurations/multi_day_tile_configuration.dart';
+import 'package:kalender/src/type_definitions.dart';
 
 class MultiDayEventGestureDetector<T> extends StatefulWidget {
   const MultiDayEventGestureDetector({
@@ -19,6 +20,7 @@ class MultiDayEventGestureDetector<T> extends StatefulWidget {
     required this.horizontalStepDuration,
     this.verticalStepDuration,
     this.verticalStep,
+    this.tileBuilder,
   });
 
   final CalendarEvent<T> event;
@@ -30,6 +32,7 @@ class MultiDayEventGestureDetector<T> extends StatefulWidget {
 
   final Duration? verticalStepDuration;
   final double? verticalStep;
+  final MultiDayTileBuilder<T>? tileBuilder;
 
   @override
   State<MultiDayEventGestureDetector<T>> createState() =>
@@ -96,7 +99,7 @@ class _MultiDayEventGestureDetectorState<T>
     void Function(DragStartDetails details)? onPanStart;
     void Function(DragUpdateDetails details)? onPanUpdate;
     Future<void> Function(DragEndDetails details)? onPanEnd;
-    if (useDesktopGestures && canReschedule) {
+    if (canReschedule) {
       onPanStart = _onRescheduleStart;
       onPanUpdate = _onRescheduleUpdate;
       onPanEnd = _onRescheduleEnd;
@@ -120,10 +123,14 @@ class _MultiDayEventGestureDetectorState<T>
             onPanUpdate: onPanUpdate,
             onPanEnd: (details) async => await onPanEnd?.call(details),
             onTap: onTap,
-            child: scope.tileComponents.multiDayTileBuilder!(
-              widget.event,
-              widget.tileConfiguration,
-            ),
+            child: widget.tileBuilder?.call(
+                  widget.event,
+                  widget.tileConfiguration,
+                ) ??
+                scope.tileComponents.multiDayTileBuilder!(
+                  widget.event,
+                  widget.tileConfiguration,
+                ),
           ),
           if (resizeLeft != null) resizeLeft,
           if (resizeRight != null) resizeRight,

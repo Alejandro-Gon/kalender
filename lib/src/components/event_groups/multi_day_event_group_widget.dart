@@ -56,25 +56,50 @@ class MultiDayEventGroupWidget<T> extends StatelessWidget {
         continuesAfter: continuesAfter,
       );
 
-      final multiDayEventTile =
-          scope.tileComponents.multiDayEventTileBuilder?.call(
-                event,
-                tileConfiguration,
-                rescheduleDateRange ?? visibleDateRange,
-                horizontalStep,
-                horizontalStepDuration,
-                verticalStepDuration,
-                verticalStep,
-              ) ??
-              MultiDayEventGestureDetector(
-                event: event,
-                rescheduleDateRange: rescheduleDateRange ?? visibleDateRange,
-                horizontalStep: horizontalStep,
-                horizontalStepDuration: horizontalStepDuration,
-                verticalStep: verticalStep,
-                verticalStepDuration: verticalStepDuration,
-                tileConfiguration: tileConfiguration,
-              );
+      Widget multiDayEventTile = const SizedBox();
+
+      if (scope.tileComponents.useGesturesOnEventTileBuilder) {
+        multiDayEventTile = MultiDayEventGestureDetector(
+          event: event,
+          rescheduleDateRange: rescheduleDateRange ?? visibleDateRange,
+          horizontalStep: horizontalStep,
+          horizontalStepDuration: horizontalStepDuration,
+          verticalStep: verticalStep,
+          verticalStepDuration: verticalStepDuration,
+          tileConfiguration: tileConfiguration,
+          tileBuilder: (event, tileConfiguration) {
+            return scope.tileComponents.multiDayEventTileBuilder?.call(
+                  event,
+                  tileConfiguration,
+                  rescheduleDateRange ?? visibleDateRange,
+                  horizontalStep,
+                  horizontalStepDuration,
+                  verticalStepDuration,
+                  verticalStep,
+                ) ??
+                const SizedBox();
+          },
+        );
+      } else {
+        multiDayEventTile = scope.tileComponents.multiDayEventTileBuilder?.call(
+              event,
+              tileConfiguration,
+              rescheduleDateRange ?? visibleDateRange,
+              horizontalStep,
+              horizontalStepDuration,
+              verticalStepDuration,
+              verticalStep,
+            ) ??
+            MultiDayEventGestureDetector(
+              event: event,
+              rescheduleDateRange: rescheduleDateRange ?? visibleDateRange,
+              horizontalStep: horizontalStep,
+              horizontalStepDuration: horizontalStepDuration,
+              verticalStep: verticalStep,
+              verticalStepDuration: verticalStepDuration,
+              tileConfiguration: tileConfiguration,
+            );
+      }
 
       children.add(
         LayoutId(
