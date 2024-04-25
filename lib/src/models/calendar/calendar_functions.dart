@@ -10,6 +10,7 @@ class CalendarEventHandlers<T> {
     this.onEventTapped,
     this.onDateTapped,
     this.onEventChangeStart,
+    this.onEventUpdated,
     this.onPageChanged,
     this.onCreateEvent,
     this.onEventCreated,
@@ -17,6 +18,12 @@ class CalendarEventHandlers<T> {
 
   /// The [Function] called before the event is changed.
   final void Function(CalendarEvent<T> event)? onEventChangeStart;
+
+  /// The [Function] called after the event is updated.
+  final void Function(
+    DateTimeRange initialDateTimeRange,
+    CalendarEvent<T> event,
+  )? onEventUpdated;
 
   /// The [Function] called after the event is changed.
   ///

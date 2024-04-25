@@ -235,6 +235,15 @@ class _MultiDayEventGestureDetectorState<T>
     // Set the current steps.
     currentHorizontalSteps = horizontalSteps;
     currentVerticalSteps = verticalSteps;
+
+    if (eventsController.selectedEvent == null) {
+      return;
+    }
+
+    scope.functions.onEventUpdated?.call(
+      initialDateTimeRange,
+      eventsController.selectedEvent!,
+    );
   }
 
   /// Handles the onHorizontalDragStart event. (Left)

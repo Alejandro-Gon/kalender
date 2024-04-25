@@ -509,6 +509,15 @@ class _EventGestureDetectorState<T> extends State<EventGestureDetector<T>> {
 
     currentHorizontalSteps = horizontalSteps;
     currentVerticalSteps = verticalSteps;
+
+    if (eventsController.selectedEvent == null) {
+      return;
+    }
+
+    scope.functions.onEventUpdated?.call(
+      initialDateTimeRange,
+      eventsController.selectedEvent!,
+    );
   }
 
   /// Handles the onRescheduleEnd event.
