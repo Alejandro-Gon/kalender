@@ -170,10 +170,13 @@ class _EventGestureDetectorState<T> extends State<EventGestureDetector<T>> {
             onPanStart: onPanStart,
             onPanUpdate: onPanUpdate,
             onPanEnd: (details) async => await onPanEnd?.call(details),
+            onPanCancel: () async => await onPanEnd?.call(DragEndDetails()),
             onLongPressStart: onLongPressStart,
             onLongPressMoveUpdate: onLongPressMoveUpdate,
             onLongPressEnd: (details) async =>
                 await onLongPressEnd?.call(details),
+            onLongPressCancel: () async =>
+                await onLongPressEnd?.call(const LongPressEndDetails()),
             child: Stack(
               fit: StackFit.expand,
               children: [
@@ -214,7 +217,7 @@ class _EventGestureDetectorState<T> extends State<EventGestureDetector<T>> {
   }
 
   /// Handles the onPanEnd event.
-  Future<void> _onPanEnd(DragEndDetails details) async {
+  Future<void> _onPanEnd(DragEndDetails _) async {
     await _onRescheduleEnd();
   }
 
@@ -229,7 +232,7 @@ class _EventGestureDetectorState<T> extends State<EventGestureDetector<T>> {
   }
 
   /// Handles the onLongPressEnd event.
-  Future<void> _onLongPressEnd(LongPressEndDetails details) async {
+  Future<void> _onLongPressEnd(LongPressEndDetails _) async {
     await _onRescheduleEnd();
   }
 
