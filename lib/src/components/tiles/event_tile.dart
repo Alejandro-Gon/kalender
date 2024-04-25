@@ -92,9 +92,7 @@ class _EventGestureDetectorState<T> extends State<EventGestureDetector<T>> {
 
   @override
   void dispose() {
-    if (canReschedule) {
-      _onRescheduleEnd();
-    }
+    _onRescheduleEnd();
     super.dispose();
   }
 
