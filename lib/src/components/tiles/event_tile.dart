@@ -92,7 +92,7 @@ class _EventGestureDetectorState<T> extends State<EventGestureDetector<T>> {
 
   @override
   void dispose() {
-    _onRescheduleEnd();
+    Future.delayed(const Duration(milliseconds: 50), _onRescheduleEnd);
     super.dispose();
   }
 
